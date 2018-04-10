@@ -1,9 +1,11 @@
 include(vcpkg_common_functions)
 
-message(WARNING
-  "You will need to also install http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml into your install location"
-  "See https://howardhinnant.github.io/date/tz.html"
-)
+if(NOT VCPKG_CMAKE_SYSTEM_NAME OR VCPKG_CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
+  message(WARNING
+    "You will need to also install http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml into your install location.\n"
+    "See https://howardhinnant.github.io/date/tz.html"
+  )
+endif()
 
 vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
@@ -27,6 +29,8 @@ vcpkg_configure_cmake(
 )
 
 vcpkg_install_cmake()
+
+vcpkg_fixup_cmake_targets(CONFIG_PATH share/unofficial-date TARGET_PATH share/unofficial-date)
 
 vcpkg_copy_pdbs()
 
